@@ -8,6 +8,9 @@ import CanvasPannel from './CanvasPannel';
 import Router from 'react-router';
 import { DefaultRoute, Link, Route, RouteHandler } from 'react-router';
 
+var HTML5Backend = require('react-dnd/modules/backends/HTML5');
+var DragDropContext = require('react-dnd').DragDropContext;
+
 var App=React.createClass({
 	mixins: [ Router.State ],
 	render:function(){
@@ -25,4 +28,5 @@ var App=React.createClass({
 	}
 });
 
-export default App;
+export default DragDropContext(HTML5Backend)(App);
+// export default App;

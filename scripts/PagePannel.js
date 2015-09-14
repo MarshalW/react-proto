@@ -11,6 +11,7 @@ import AppDispatcher from './AppDispatcher';
 var PageItem=React.createClass({
 	mixins: [ Router.State ],
 	handleClick:function(){
+		console.log('handle item click');
 		AppDispatcher.dispatch({
 			eventName:'loadPage',
 			pageId:this.props.pageItem.id
@@ -24,9 +25,11 @@ var PageItem=React.createClass({
 		this.context.router.transitionTo('switchPage',params);
 	},
 	render: function() {
+		console.log('=====>>>>>render page item');
 		let backgroundColor='Turquoise';
 
 		if(this.props.pageItem.id==this.getParams().pageId){
+			console.log('===>>>selected! ');
 			backgroundColor='SpringGreen'; 
 		}
 
@@ -50,7 +53,7 @@ var PageItem=React.createClass({
 	}
 });
 
-var PageList=React.createClass({
+var _PageList=React.createClass({
 	mixins: [ Router.State],
 	getInitialState:function(){
 		return {pageList:[]};
@@ -68,6 +71,7 @@ var PageList=React.createClass({
 		});
 	},
 	render:function(){
+		console.log('>>>>>>>>>>>>>>render page list');
 		var pageIndex=0;
 		var pageItems=this.state.pageList.map(function(pageItem){
 			pageIndex++;
@@ -89,6 +93,23 @@ var PageList=React.createClass({
 		);
 	}
 });
+
+var PageList=DragSource('pageList',{
+	beginDrag: function (props) {
+		console.log('>>>>>props');
+		var item = { id: props.id };
+    	return item;
+	}
+},function(connect, monitor){
+	console.log('==>>>>connect: '+connect.dragSource);
+	return {
+	    // Call this function inside render()
+	    // to let React DnD handle the drag events:
+	    connectDragSource: connect.dragSource(),
+	    // You can ask the monitor about the current drag state:
+	    isDragging: monitor.isDragging()
+	};
+})(_PageList);
 
 var PagePannel=React.createClass({
 	mixins: [ Router.State],
